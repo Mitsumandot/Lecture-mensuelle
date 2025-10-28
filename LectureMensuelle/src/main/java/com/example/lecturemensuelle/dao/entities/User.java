@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +31,6 @@ public class User implements UserDetails {
     private List<BookUser> books;
 
 
-    @Getter(AccessLevel.NONE)
     private boolean enabled;
 
 
@@ -52,10 +52,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public boolean isEnabled(){
-        return enabled;
 
-    }
 
 
 }

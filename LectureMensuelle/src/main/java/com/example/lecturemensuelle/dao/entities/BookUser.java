@@ -23,4 +23,15 @@ public class BookUser {
     @JoinColumn(name="book_id", nullable = false)
     private Book book;
 
+    
+    private Integer rating;
+
+    private String review;
+
+    private String reviewTitle;
+
+    private String status;
+
+    private boolean favourite;
+
 }
