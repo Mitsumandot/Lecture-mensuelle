@@ -1,0 +1,28 @@
+.title {
+    font-size:50px;
+}
+
+
+.helloMessage {
+    height:100vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap:20%;
+
+}
+
+.auth {
+    display:flex;
+    width:50%;
+    justify-content: space-around;
+    padding:20px;
+}
+
+.auth > * {
+    padding:10px;
+    font-size:20px;
+    background-color:greenyellow;
+    border-radius:5px;
+}
