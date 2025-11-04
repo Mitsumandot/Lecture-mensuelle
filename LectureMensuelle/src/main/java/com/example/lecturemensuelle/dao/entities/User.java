@@ -30,8 +30,21 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<BookUser> books;
 
-
     private boolean enabled;
+
+    public void setEmail(String email){
+        if(email.isEmpty()){
+            email = null;
+        }
+        this.email = email;
+    }
+
+    public void setUsername(String username){
+        if(username.isEmpty()){
+            username = null;
+        }
+        this.username = username;
+    }
 
 
     @Column(name = "verification_code")

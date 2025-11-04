@@ -7,13 +7,12 @@ import com.example.lecturemensuelle.dto.LoginUserDto;
 import com.example.lecturemensuelle.dto.RegisterUserDto;
 import com.example.lecturemensuelle.dto.VerifyUserDto;
 import com.example.lecturemensuelle.response.LoginResponse;
+import com.example.lecturemensuelle.response.VerificationResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,10 +28,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto){
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto){
+        User authenticatedUser = null;
+        try {
+            authenticatedUser = authenticationService.authenticate(loginUserDto);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
         String jwtToken = jwtService.generateToken(authenticatedUser);
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getUsername());
         return ResponseEntity.ok(loginResponse);
 
     }
@@ -40,7 +44,8 @@ public class AuthenticationController {
     public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto){
         try {
             authenticationService.verifyUser(verifyUserDto);
-            return ResponseEntity.ok("Account Verified successfully");
+            VerificationResponse verificationResponse = new VerificationResponse("Account Verified successfully");
+            return ResponseEntity.ok(verificationResponse);
         }
         catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -10,8 +10,10 @@ import com.example.lecturemensuelle.dto.VerifyUserDto;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +48,10 @@ public class AuthenticationService {
             if(!user.isEnabled()){
                 throw new RuntimeException("Email not verified. Please, verify your Email first.");
             }
-            Authentication authentication = authenticationManager.authenticate(
+            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            input.getEmail(),
-                            input.getPassword()
+                                    input.getEmail(),
+                                    input.getPassword()
                     )
             );
             return user;

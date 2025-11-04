@@ -1,5 +1,6 @@
 package com.example.lecturemensuelle.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,8 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-    private String JwtToken;
-    private long expireIn;
-    private String username;
+public class VerificationResponse {
+    private String message;
 }
