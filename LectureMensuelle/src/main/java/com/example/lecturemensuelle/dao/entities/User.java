@@ -1,8 +1,9 @@
 package com.example.lecturemensuelle.dao.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +17,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +32,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<BookUser> books;
+    private List<UserBook> books;
 
     private boolean enabled;
 

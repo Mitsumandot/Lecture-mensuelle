@@ -42,7 +42,7 @@ public class AuthenticationService {
     }
 
     public User authenticate(LoginUserDto input){
-        Optional <User> optionalUser = userRepository.findByEmail(input.getEmail());
+        Optional <User> optionalUser = userRepository.findByUsername(input.getEmail());
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             if(!user.isEnabled()){

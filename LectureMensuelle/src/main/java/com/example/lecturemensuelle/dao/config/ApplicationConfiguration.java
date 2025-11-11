@@ -2,7 +2,9 @@ package com.example.lecturemensuelle.dao.config;
 
 
 import com.example.lecturemensuelle.dao.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,9 +22,11 @@ public class ApplicationConfiguration {
     private final UserRepository userRepository;
 
 
+
+
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
+        return username -> userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
