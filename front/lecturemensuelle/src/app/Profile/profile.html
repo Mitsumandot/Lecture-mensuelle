@@ -1,0 +1,21 @@
+
+<main>
+    @if(user?.username){
+        <h1>Bienvenue {{user.username}}!! </h1>
+        <div class="books">
+            @for(book of userBooks; track book.id){
+                <div class="book">
+                    <img [src]="book.bookImage" alt="cover of image for {{book.bookName}}">
+                    <div class="text">
+                        <p>{{book.bookName}}</p>
+                        <p>{{book.author}}</p>
+                        <p>{{book.rating}}</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    @else{
+        <h1>Chargement</h1>
+    }
+</main>
