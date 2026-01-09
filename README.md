@@ -31,6 +31,9 @@ This API automatically retrieves book information such as description, cover ima
 
 The back-end communicates with a database hosted on **Neon.tech**.
 
+<img width="2542" height="1184" alt="image" src="https://github.com/user-attachments/assets/d75dfe20-2e5d-48cc-be50-6b5f43aace2a" />
+
+
 ## Technologies Used
 
 - **Back-end:** Spring Boot
