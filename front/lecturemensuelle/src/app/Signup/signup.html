@@ -3,19 +3,20 @@
         <form (ngSubmit)="submitSignup()">
             <h2>Sign Up</h2>
             <label for="name">Name:</label>
-            <input type="text" name="name" [(ngModel)]="user.username">
+            <input type="text" name="name" [(ngModel)]="user.username" placeholder="Enter your name">
         
             <label for="email">Email:</label>
-            <input type="email" name="email" [(ngModel)]="user.email">
+            <input type="email" name="email" [(ngModel)]="user.email" placeholder="Enter your email">
         
             <label for="password">Password:</label>
-            <input type="password" name="password" [(ngModel)]="user.password">
+            <input type="password" name="password" [(ngModel)]="user.password" placeholder="Enter your password">
             
             <button type="submit">Sign up</button>
         </form>
         <form [style.visibility]="visibility" (ngSubmit)="submitVerification()">
-            <label for="code">Verification code :</label>
-            <input type="text" name="code" [(ngModel)]="verificationRequest.verificationCode">
+            <h2>Verify Your Email</h2>
+            <label for="code">Verification code:</label>
+            <input type="text" name="code" [(ngModel)]="verificationRequest.verificationCode" placeholder="Enter verification code">
             <button type="submit">Verify</button>
         </form>
     </div>

@@ -1,0 +1,77 @@
+<app-header></app-header>
+<main>
+    @if(isLoading){
+    <div class="loading-container">
+        <div class="loading">
+            <p>Chargement du livre...</p>
+        </div>
+    </div>
+    } @else if(error){
+    <div class="error-container">
+        <div class="error">
+            <p>{{error}}</p>
+            <button routerLink="/profile" class="back-button">Retour au profil</button>
+        </div>
+    </div>
+    } @else if(book){
+    <div class="book-container">
+        <div class="book-content">
+            <div class="book-image-section">
+                <img [src]="book.image" [alt]="book.name" class="book-cover">
+            </div>
+            <div class="book-details">
+                <h1 class="book-title">{{book.name}}</h1>
+                <p class="book-author">par {{book.author}}</p>
+                @if(book.average){
+                <div class="book-rating">
+                    <span class="rating-label">Note moyenne:</span>
+                    <span class="rating-value">{{book.average}}/10</span>
+                </div>
+                }
+                <div class="book-description">
+                    <h2>Description</h2>
+                    <p>{{book.description}}</p>
+                </div>
+                <form (ngSubmit)="submitRating()">
+                    <div class="form-group">
+                        <label for="rating">Votre note</label>
+                        <select id="rating" name="rating" [(ngModel)]="userBook.rating" required>
+                            <option value="" disabled selected>Choisir une note</option>
+                            @for (r of [1,2,3,4,5,6,7,8,9,10]; track r) {
+                            <option [value]="r">{{ r }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="status">Statut</label>
+                        <select id="status" name="status" [(ngModel)]="userBook.status" required>
+                            <option value="READ">Lu</option>
+                            <option value="READING">En cours</option>
+                            <option value="DROPPED">Abandonné</option>
+                            <option value="PLAN_TO_READ">À lire</option>
+                        </select>
+                    </div>
+
+                    <!-- Favorite -->
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" name="favorite" [(ngModel)]="userBook.favourite" />
+                            Ajouter aux favoris
+                        </label>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="submit-button" [disabled]="!userBook.rating|| !userBook.status">
+                        Enregistrer
+                    </button>
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    }
+</main>

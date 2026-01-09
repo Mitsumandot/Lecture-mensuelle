@@ -5,6 +5,7 @@ import com.example.lecturemensuelle.dao.entities.Book;
 import com.example.lecturemensuelle.dao.entities.UserBook;
 import com.example.lecturemensuelle.dao.repositories.BookRepository;
 import com.example.lecturemensuelle.dao.repositories.UserBookRepository;
+import com.example.lecturemensuelle.dto.BookDto;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.json.JSONObject;
+
+import javax.swing.text.html.Option;
 
 @Service
 @AllArgsConstructor
@@ -26,8 +31,20 @@ public class BookService {
 
     private final UserBookRepository bookUserRepository;
 
-    public List<Book> SearchByName(String name){
-        return bookRepository.findByNameContainingIgnoreCase(name);
+    public List<BookDto> searchByName(String name){
+        List<Book> books = bookRepository.findByNameContainingIgnoreCase(name);
+        List<BookDto> booksDto = new ArrayList<>();
+        for(Book book : books){
+            BookDto bookDto = new BookDto(book.getId(),
+                    book.getName(),
+                    book.getDescription(),
+                    book.getAuthor(),
+                    this.getAverage(book),
+                    book.getImage());
+            booksDto.add(bookDto);
+
+        }
+        return booksDto;
     }
 
     public List<Book> getAllBooks(){
@@ -43,6 +60,20 @@ public class BookService {
             average += bookUser.getRating();
         }
         return average/size;
+    }
+
+    public BookDto getBookById(Long id){
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if(optionalBook.isEmpty()){
+            return null;
+        }
+        Book book = optionalBook.get();
+        return new BookDto(book.getId(),
+                book.getName(),
+                book.getDescription(),
+                book.getAuthor(),
+                this.getAverage(book),
+                book.getImage());
     }
 
     public Book addGoogleBook(String title){

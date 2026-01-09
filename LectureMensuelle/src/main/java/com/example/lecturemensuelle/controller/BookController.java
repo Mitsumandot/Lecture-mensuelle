@@ -4,13 +4,13 @@ package com.example.lecturemensuelle.controller;
 import com.example.lecturemensuelle.dao.entities.Book;
 import com.example.lecturemensuelle.dao.entities.User;
 import com.example.lecturemensuelle.dao.services.BookService;
+import com.example.lecturemensuelle.dto.BookDto;
 import com.example.lecturemensuelle.request.BookRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/book")
 @RestController
@@ -25,5 +25,17 @@ public class BookController {
         Book book = bookService.addGoogleBook(bookRequest.getTitle());
         return ResponseEntity.ok(book);
 
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<BookDto>> searchBook(@RequestParam("name") String name){
+        List<BookDto> books = bookService.searchByName(name);
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/book")
+    public ResponseEntity<BookDto> BookInfo(@RequestParam("id") Long id){
+        BookDto bookDto = bookService.getBookById(id);
+        return ResponseEntity.ok(bookDto);
     }
 }

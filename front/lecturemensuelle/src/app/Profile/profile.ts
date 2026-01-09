@@ -3,12 +3,16 @@ import { FormsModule } from "@angular/forms";
 import { UserService } from "../core/services/user.service";
 import { OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { UserBookService } from "../core/services/userbook.service";
 import { UserBook } from "../core/userbook.model";
+import { Header } from "../Header/header";
+import { BookService } from "../core/services/book.service";
+import { Book } from "../core/book.model";
 @Component({
     selector:'app-profile',
     standalone:true,
-    imports:[FormsModule],
+    imports:[FormsModule, Header, RouterLink],
     templateUrl:'./profile.html',
     styleUrl:'./profile.css'
 })
@@ -16,7 +20,7 @@ import { UserBook } from "../core/userbook.model";
 export class Profile implements OnInit {
 
     constructor(private userService : UserService, private router: Router, 
-        private userBookService : UserBookService){}
+        private userBookService : UserBookService, private bookService: BookService){}
 
     user = {
         username: '',
@@ -24,6 +28,10 @@ export class Profile implements OnInit {
     }
 
     userBooks : UserBook[] = [];
+    filteredBooks : Book[] = [];
+    searchQuery: string = '';
+    isSearching: boolean = false;
+    showUserBooks: boolean = true;
 
     ngOnInit(): void {
         let myObservable = this.userService.getUser().subscribe({
@@ -46,7 +54,41 @@ export class Profile implements OnInit {
         })
     }
 
-
+    onSearch(query: string): void {
+        this.searchQuery = query;
+        if (!this.searchQuery.trim()) {
+            this.showUserBooks = true;
+            this.isSearching = false;
+            
+        } else {
+           
+            this.isSearching = true;
+            this.showUserBooks = false;
+            this.bookService.searchBooks(this.searchQuery).subscribe({
+                next: (response: Book[]) => {
+                    this.filteredBooks = response;
+                    this.isSearching = false;
+                },
+                error: (err) => {
+                    console.error('Search error:', err);
+                    this.isSearching = false;
+                    this.filteredBooks = [];
+                }
+            });
+        }
+    }
+    
+    deleteUserBook(id : number): void {
+        this.userBookService.DeleteUserBook(id).subscribe({
+            next: (response: UserBook) => {
+                this.ngOnInit();
+                console.log(response);
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        })
+    }
 
     
 }

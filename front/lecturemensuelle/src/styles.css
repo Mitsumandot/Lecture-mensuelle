@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  --primary-color: #ad8350;
+  --primary-color-dark: #8b6a3d;
+  --primary-color-rgb: 173, 131, 80;
+  --white: #ffffff;
+}
+
 *,
 *::before,
 *::after {

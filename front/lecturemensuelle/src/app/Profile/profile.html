@@ -1,21 +1,65 @@
-
+<app-header (searchEvent)="onSearch($event)"></app-header>
 <main>
     @if(user?.username){
-        <h1>Bienvenue {{user.username}}!! </h1>
-        <div class="books">
-            @for(book of userBooks; track book.id){
-                <div class="book">
-                    <img [src]="book.bookImage" alt="cover of image for {{book.bookName}}">
-                    <div class="text">
-                        <p>{{book.bookName}}</p>
-                        <p>{{book.author}}</p>
-                        <p>{{book.rating}}</p>
-                    </div>
-                </div>
-            }
+    @if(showUserBooks){
+    <h1>Bienvenue {{user.username}}!! </h1>
+    } @else {
+    <h1>Résultats de recherche</h1>
+    }
+    @if(isSearching){
+    <div class="loading">
+        <p>Recherche en cours...</p>
+    </div>
+    } @else {
+    <div class="books">
+        @if(showUserBooks){
+        @if(userBooks.length > 0){
+        @for(book of userBooks; track book.id){
+        <div class="book">
+            <img [src]="book.bookImage" alt="cover of image for {{book.bookName}}">
+            <div class="text">
+                <p>{{book.bookName}}</p>
+                <p>{{book.author}}</p>
+                @if(book.rating){
+                <p>{{book.rating}}</p>
+                }
+            </div>
+            <button type="button" (click)="deleteUserBook(book!.id)">
+                Supprimer
+            </button>
         </div>
+        }
+        } @else {
+        <div class="no-results">
+            <p>Aucun livre dans votre collection</p>
+        </div>
+        }
+        } @else {
+        @if(filteredBooks.length > 0){
+        @for(book of filteredBooks; track book.id){
+        <a class="book" [routerLink]="['/book', book.id]">
+            <div class="book">
+                <img [src]="book.image" alt="cover of image for {{book.name}}">
+                <div class="text">
+                    <p>{{book.name}}</p>
+                    <p>{{book.author}}</p>
+                    @if(book.average){
+                    <p>{{book.average}}</p>
+                    }
+                </div>
+            </div>
+        </a>
+        }
+        } @else if(searchQuery && !isSearching) {
+        <div class="no-results">
+            <p>Aucun livre trouvé pour "{{searchQuery}}"</p>
+        </div>
+        }
+        }
+    </div>
+    }
     }
     @else{
-        <h1>Chargement</h1>
+    <h1>Chargement</h1>
     }
 </main>

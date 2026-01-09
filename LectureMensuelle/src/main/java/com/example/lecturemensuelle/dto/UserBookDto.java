@@ -35,7 +35,7 @@ public class UserBookDto {
 
     private String status;
 
-    private Boolean favourite;
+    private boolean favourite;
 
 
 

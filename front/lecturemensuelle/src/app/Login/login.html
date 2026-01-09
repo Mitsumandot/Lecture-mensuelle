@@ -1,10 +1,10 @@
 <main>
     <div class="container">
         <form (ngSubmit)="submitLogin()">
-            <label for="email">Email :</label>
-            <input type="text" name="email" [(ngModel)]="user.email">
-            <label for="password">Password :</label>
-            <input type="password" name="password" [(ngModel)]="user.password">
+            <label for="email">Email:</label>
+            <input type="text" name="email" [(ngModel)]="user.email" placeholder="Enter your email">
+            <label for="password">Password:</label>
+            <input type="password" name="password" [(ngModel)]="user.password" placeholder="Enter your password">
             <div [style.visibility]="loginError">{{loginErrorContent}}</div>
             <button type="submit">Login</button>
         </form>

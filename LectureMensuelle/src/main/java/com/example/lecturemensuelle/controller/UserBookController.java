@@ -11,6 +11,7 @@ import com.example.lecturemensuelle.dao.services.UserBookService;
 import com.example.lecturemensuelle.dao.services.UserService;
 import com.example.lecturemensuelle.dto.UserBookDto;
 import com.example.lecturemensuelle.request.UserBookRequest;
+import com.sun.security.auth.UnixNumericUserPrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,7 @@ public class UserBookController {
         return ResponseEntity.ok(booksDto);
     }
     @PostMapping("/{id}")
-    public ResponseEntity<?> createUserBook(@PathVariable Long id, @RequestBody UserBookRequest userBookRequest){
+    public ResponseEntity<?> createUserBook(@PathVariable Long id, @RequestBody UserBookDto userBookDto){
         System.out.println("Hello");
         Optional<Book> optionalBook = bookRepository.findById(id);
         if(optionalBook.isEmpty()){
@@ -57,22 +58,22 @@ public class UserBookController {
         User user = userService.getCurrentUser();
         Optional<UserBook> optionalUserBook = userBookRepository.findByUserAndBook(user, book);
         if(optionalUserBook.isPresent()){
-            return this.updateUserBook(id, userBookRequest);
+            return this.updateUserBook(id, userBookDto);
         }
         UserBook userBook = new UserBook();
-        userBook.setRating(userBookRequest.getRating());
+        userBook.setRating(userBookDto.getRating());
         userBook.setUser(user);
         userBook.setBook(book);
-        userBook.setReview(userBookRequest.getReview());
-        userBook.setReviewTitle(userBookRequest.getReviewTitle());
-        userBook.setStatus(userBookRequest.getStatus());
-        userBook.setFavourite(userBookRequest.isFavourite());
+        userBook.setReview(userBookDto.getReview());
+        userBook.setReviewTitle(userBookDto.getReviewTitle());
+        userBook.setStatus(userBookDto.getStatus());
+        userBook.setFavourite(userBookDto.isFavourite());
         userBook = userBookService.createUserBook(userBook);
         return ResponseEntity.ok(userBook);
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<?> updateUserBook(@PathVariable Long id, @RequestBody UserBookRequest userBookRequest){
+    public ResponseEntity<?> updateUserBook(@PathVariable Long id, @RequestBody UserBookDto userBookDto){
         Optional<Book> optionalBook = bookRepository.findById(id);
         if(optionalBook.isEmpty()){
             return ResponseEntity.ok(null);
@@ -84,16 +85,28 @@ public class UserBookController {
             return ResponseEntity.ok(null);
         }
         UserBook userBook = optionalUserBook.get();
-        userBook.setRating(userBookRequest.getRating());
-        userBook.setReview(userBookRequest.getReview());
-        userBook.setReviewTitle(userBookRequest.getReviewTitle());
-        userBook.setStatus(userBookRequest.getStatus());
-        userBook.setFavourite(userBookRequest.isFavourite());
+        userBook.setRating(userBookDto.getRating());
+        userBook.setReview(userBookDto.getReview());
+        userBook.setReviewTitle(userBookDto.getReviewTitle());
+        userBook.setStatus(userBookDto.getStatus());
+        userBook.setFavourite(userBookDto.isFavourite());
         userBook = userBookService.createUserBook(userBook);
         return ResponseEntity.ok(userBook);
 
 
     }
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUserBook(@PathVariable Long id){
+        Optional<UserBook> optionalBook = userBookRepository.findById(id);
+        if(optionalBook.isEmpty()){
+            return ResponseEntity.ok(null);
+        }
+        UserBook book = optionalBook.get();
 
+        userBookRepository.delete(book);
+
+        return ResponseEntity.ok(book);
+
+    }
 
 }

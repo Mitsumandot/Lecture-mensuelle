@@ -45,7 +45,6 @@ export class Signup {
                 this.visibility = "hidden";
             }
         });
-        console.log("mok");
     }
 
     submitVerification(){
